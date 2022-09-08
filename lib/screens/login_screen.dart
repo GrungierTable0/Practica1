@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   
   @override
   Widget build(BuildContext context) {
+    
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final txtUser = TextField(
       controller: txtConUser,
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       body: Container(
         //height: double.infinity,
-        padding: EdgeInsets.all(MediaQuery.of(context).size.height / 20) ,
+        padding: EdgeInsets.all(MediaQuery.of(context).size.height / 40) ,
         height: MediaQuery.of(context).size.height,//sirve para que un elemnto tenga el ancho y largo de la pantalla
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -63,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.center,
           children: [
             Positioned(
-              top: MediaQuery.of(context).size.width / 7,
+              top: MediaQuery.of(context).size.width / 6,
               child: Image.asset(
                 'assets/logo_A.png',
                 width: MediaQuery.of(context).size.width/ 1.5,
@@ -71,10 +72,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Container(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.width/30,
+                top: MediaQuery.of(context).size.width/60,
                 left: MediaQuery.of(context).size.width/30,
                 right: MediaQuery.of(context).size.width/30,
-                bottom: MediaQuery.of(context).size.width/30
+                bottom: MediaQuery.of(context).size.width/60
               ),
               color: Colors.white,
               child: ListView(
@@ -86,57 +87,68 @@ class _LoginScreenState extends State<LoginScreen> {
                     
                   ), 
                   txtPwd,
-                  const Text('Mantener Sesion'),
+                  const Text('Mantener Sesion',textAlign:TextAlign.center,),
                   choLogin,
 
                 ],
               ),
             ),
-            Positioned(
+            /*Positioned(
               bottom: MediaQuery.of(context).size.width / 9,
               right:  MediaQuery.of(context).size.width / 20,
-              child: GestureDetector(
-                onTap: () async {
-                  //print('Valor de la caja ${txtConUser.text}');
-                  if('prueba@correo.com'.compareTo(txtConUser.text)==0 && '1234'.compareTo(txtConPwd.text)==0){
-                    await ProgressDialog.future(
-                      context, 
-                      future: Future.delayed(Duration(seconds: 1), () {
-                        return "";
-                      }),
-                      message: Text("Please Wait"),
-                      title: Text("Loging in"),
-                    );
-                    Navigator.pushNamed(context, '/dash',);  
-                  }else{
-                      await DialogBackground(
-                        dialog: AlertDialog(
-                          title: Text("Alert Dialog"),
-                          content: Text("Ups.. Esta es una version de prueba, debes ingresar los siguientes valores\ncorreo: prueba@correo.com\ncontraseña:1234"),
-                          backgroundColor: Colors.red,
-                          titleTextStyle: TextStyle(color: Colors.white, fontSize: 30),
-                          contentTextStyle: TextStyle(color: Colors.white),
-                          
-                        ),
-                      ).show(context);
-                  }
-                },
-                child: Image.asset(
-                  'assets/escudo.png',
-                  height: MediaQuery.of(context).size.width / 7,
-                ),
-              ),
-            ),
+              child: 
+            ),*/
             Positioned(
-              bottom: MediaQuery.of(context).size.width / 50,
+              bottom: MediaQuery.of(context).size.width / 80,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width / 20
+                  horizontal: MediaQuery.of(context).size.width /8
                 ),
-                width: MediaQuery.of(context).size.width / 1.8  ,
+                width: MediaQuery.of(context).size.width /1,
                 child: Column(
                   //shrinkWrap: true,
                   children: [
+                    GestureDetector(
+                    
+                      onTap: () async {
+                        //print('Valor de la caja ${txtConUser.text}');
+                        
+                        
+                        if('prueba@correo.com'.compareTo(txtConUser.text)==0 && '1234'.compareTo(txtConPwd.text)==0){
+                          await ProgressDialog.future(
+                            context, 
+                            future: Future.delayed(Duration(seconds: 1), () {
+                              return "";
+                            }),
+                            message: Text("Please Wait"),
+                            title: Text("Loging in"),
+                          );
+                          final prefs = await SharedPreferences.getInstance();
+                          if(bandera){
+                            await prefs.setBool('keepLogin', true);
+                          }else{
+                            await prefs.setBool('keepLogin', false);
+                          }
+                          Navigator.pushNamed(context, '/dash',);  
+                        }else{
+                            await DialogBackground(
+                              dialog: AlertDialog(
+                                title: Text("Alert Dialog"),
+                                content: Text("Ups.. Esta es una version de prueba, debes ingresar los siguientes valores\ncorreo: prueba@correo.com\ncontraseña:1234"),
+                                backgroundColor: Colors.red,
+                                titleTextStyle: TextStyle(color: Colors.white, fontSize: 30),
+                                contentTextStyle: TextStyle(color: Colors.white),
+                                
+                              ),
+                            ).show(context);
+                        }
+                      },
+                      child: Image.asset(
+                        'assets/escudo.png',
+                        height: MediaQuery.of(context).size.width / 7,
+                      ),
+                      
+                    ),
                     SocialLoginButton(
                       buttonType: SocialLoginButtonType.facebook,
                       onPressed: () {},
@@ -151,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       buttonType: SocialLoginButtonType.google,
                       onPressed: () {},
                     ),
+                    
                   ],
                 ),
               ),

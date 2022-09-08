@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool bandera=false;
+    Future<bool> initSP() async {
+      final prefs = await SharedPreferences.getInstance();
+      return await prefs.getBool('keepLogin') ?? false;
+    }
+    void res() async{
+      print('${await initSP()} Dash');
+      bandera=await initSP();
+    }
+    res();
+    
     return Scaffold(
       appBar: AppBar(),
       drawer: Drawer(
@@ -47,7 +59,9 @@ class DashboardScreen extends StatelessWidget {
               leading: Image.asset('assets/iconGroot.png'),
               trailing: Icon(Icons.chevron_right),
               title: Text('Cerrar Sesión'),
-              onTap: (){
+              onTap: () async{
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('keepLogin', false);
                 Navigator.pushNamed(context, '/login',);
               },
             )
